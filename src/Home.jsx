@@ -115,7 +115,7 @@ const Home = () => {
 )}
   </div>
 
-  <div className="sticky">
+  <div className="sticky bottom-0">
     <div className="flex p-2">
       <input
         type="text"
