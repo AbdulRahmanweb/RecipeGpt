@@ -55,7 +55,7 @@ const Home = () => {
 
       {/*Navbar*/}
       <div className="flex-1 flex flex-col">
-        <div className=" dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 p-2">
+        <div className="sticky top-0 dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 p-2">
     <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white text-lg px-2 py-1 rounded">
       ☰
     </button>
