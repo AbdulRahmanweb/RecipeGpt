@@ -115,8 +115,8 @@ const Home = () => {
 )}
   </div>
 
-  <div className="">
-    <div className="flex w-full p-2">
+  <div className="sticky">
+    <div className="flex p-2">
       <input
         type="text"
         placeholder="Search recipe..."
