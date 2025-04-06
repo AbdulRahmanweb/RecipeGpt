@@ -39,12 +39,12 @@ const Home = () => {
   };
 
   return (
-    <div className="flex h-screen dark:bg-gray-900 dark:text-white">
+    <div className="flex h-screen dark:bg-gray-700 dark:text-white">
       {/* Sidebar */}
-      <div className={`fixed md:static top-0 left-0 z-20 h-full bg-gray-100 dark:bg-gray-800 w-64 p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
+      <div className={`fixed md:static top-0 left-0 z-20 h-full bg-gray-100 dark:bg-gray-950 w-64 p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <h2 className="text-lg font-semibold mb-4">Saved Recipes</h2>
         {saved.map((item, index) => (
-          <div key={index} onClick={() => dispatch(selectRecipe(item))} className="cursor-pointer text-blue-600 dark:text-blue-300 hover:underline mb-2">
+          <div key={index} onClick={() => dispatch(selectRecipe(item))} className="cursor-pointer text-black dark:text-white dark:hover:bg-gray-700 mb-2 p-1">
             {item.title}
           </div>
         ))}
@@ -54,33 +54,30 @@ const Home = () => {
       {sidebarOpen && <div onClick={() => dispatch(toggleSidebar())} className="fixed inset-0 bg-black bg-opacity-40 z-10 md:hidden" />}
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded">
-            ☰
-          </button>
-      <div className="flex w-full">
-      <input
-      type="text"
-      placeholder="Search recipe..."
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      className="border p-2 rounded-l w-full dark:bg-gray-700 dark:border-gray-600 focus:outline-none" />
-      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r">
-      {loading ? <FaSpinner className="animate-spin" /> : "Go"}
+      <div className="flex-1 flex flex-col">
+        <div className=" dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 p-2">
+    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded">
+      ☰
+    </button>
+    <h1 className="font-semibold text-lg">RecipeGPT</h1>
+    <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-500 text-white p-2 rounded">
+      {darkMode ? <FaSun /> : <FaMoon />}
     </button>
   </div>
-          <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-500 text-white p-2 rounded">
-            {darkMode ? <FaSun /> : <FaMoon />}
-          </button>
-        </div>
 
-        {loading && loading && (
+  <div className="flex-1 overflow-y-auto scrollbar-hide">
+    {/*Content*/}
+    {loading && loading && (
   <div className="animate-pulse space-y-4 bg-white dark:bg-gray-800 p-4 rounded shadow">
     <div className="h-6 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Title */}
-    <div className="h-48 w-full max-w-md bg-gray-300 dark:bg-gray-700 rounded" /> {/* Image */}
+    <div className="h-60 w-full max-w-md bg-gray-300 dark:bg-gray-700 rounded" /> {/* Image */}
 
     <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Ingredients */}
+    <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded" />
+    <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded" />
+    <div className="h-3 w-4/5 bg-gray-300 dark:bg-gray-700 rounded mb-4" />
+
+    <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Instructions */}
     <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded" />
     <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded" />
     <div className="h-3 w-4/5 bg-gray-300 dark:bg-gray-700 rounded mb-4" />
@@ -93,7 +90,7 @@ const Home = () => {
 )}
 
         {selectedRecipe && (
-  <div className="bg-white dark:bg-gray-800 rounded shadow p-4 flex-col items-center">
+  <div className="bg-white dark:bg-gray-700 rounded shadow p-4 flex-col items-center">
     <h1 className="text-xl font-bold mb-2">{selectedRecipe.title}</h1>
     
     {selectedRecipe.imageUrl && (<>
@@ -116,6 +113,22 @@ const Home = () => {
     )}
   </div>
 )}
+  </div>
+
+  <div className="mt-auto">
+    <div className="flex w-full p-1">
+      <input
+        type="text"
+        placeholder="Search recipe..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        className="border p-2 rounded-l w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none"
+      />
+      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r">
+        {loading ? <FaSpinner className="animate-spin" /> : "Go"}
+      </button>
+    </div>
+  </div>
 
       </div>
     </div>
