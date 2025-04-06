@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   return (
-    <div className="flex h-screen dark:bg-gray-700 dark:text-white">
+    <div className="flex dark:bg-gray-700 dark:text-white">
       {/* Sidebar */}
       <div className={`fixed md:static top-0 left-0 z-20 h-full bg-gray-100 dark:bg-gray-950 w-64 p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <h2 className="text-lg font-semibold mb-4">Saved Recipes</h2>
@@ -116,7 +116,7 @@ const Home = () => {
   </div>
 
   <div className="mt-auto">
-    <div className="flex w-full p-1">
+    <div className="flex w-full p-2">
       <input
         type="text"
         placeholder="Search recipe..."
