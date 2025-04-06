@@ -115,7 +115,7 @@ const Home = () => {
 )}
   </div>
 
-  <div className="mt-auto">
+  <div className="">
     <div className="flex w-full p-2">
       <input
         type="text"
