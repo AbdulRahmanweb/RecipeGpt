@@ -120,9 +120,9 @@ const Home = () => {
         placeholder="Search recipe..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="border p-2 rounded-l w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none"
+        className="border p-2 rounded-l w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none mb-1"
       />
-      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r">
+      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r mb-1">
         {loading ? <FaSpinner className="animate-spin" /> : "Go"}
       </button>
     </div>
