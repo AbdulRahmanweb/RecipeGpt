@@ -93,21 +93,46 @@ const Home = () => {
     <h1 className="text-xl font-bold mb-2">{selectedRecipe.title}</h1>
     
     {selectedRecipe.imageUrl && (<>
-      <img src={selectedRecipe.imageUrl} alt={selectedRecipe.title} className="w-full rounded-lg max-w-md mb-2 mt-4"  />
+      <img src={selectedRecipe.imageUrl} alt={selectedRecipe.title} className="w-full rounded-lg max-w-lg mb-2 mt-4"  />
     </>)}
 
     {selectedRecipe.ingredients && (
       <div className="mb-4">
+        {/*Source*/}
+        <div className="mt-2 mb-2">
+    <span className={`inline-block px-2 py-1 rounded text-xs font-medium 
+      ${selectedRecipe.source === "OpenAI" ? "bg-blue-100 text-blue-800" : "bg-green-100 text-green-800"}`}>
+      Source: {selectedRecipe.source}
+    </span>
+  </div>
         <button onClick={handleSave} className="bg-green-600 text-white px-4 mb-2 rounded">Save</button>
         <h2 className="font-semibold text-lg mb-1">🧂 Ingredients</h2>
+  
         <pre className="whitespace-pre-wrap text-gray-100">{selectedRecipe.ingredients}</pre>
       </div>
     )}
 
     {selectedRecipe.description && (
       <div>
-        <h2 className="font-semibold text-lg mb-1">👨‍🍳 Instructions</h2>
-        <pre className="whitespace-pre-wrap text-gray-100">{selectedRecipe.description}</pre>
+  {selectedRecipe.analyzedInstructions?.[0]?.steps?.length > 0 ? (
+  <div>
+    <h2 className="font-semibold text-lg mb-1">Instructions</h2>
+    <ol className="list-decimal pl-5 text-gray-100 space-y-1">
+      {selectedRecipe.analyzedInstructions[0].steps.map((step) => (
+        <li key={step.number}>{step.step}</li>
+      ))}
+    </ol>
+  </div>
+) : (
+  selectedRecipe.description && (
+    <div>
+      <h2 className="font-semibold text-lg mb-1">Instructions</h2>
+      <pre className="whitespace-pre-wrap text-gray-100">
+        {selectedRecipe.description}
+      </pre>
+    </div>
+  )
+)}
       </div>
     )}
   </div>
