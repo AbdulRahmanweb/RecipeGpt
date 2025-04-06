@@ -53,10 +53,10 @@ const Home = () => {
       {/* Overlay on mobile when sidebar is open */}
       {sidebarOpen && <div onClick={() => dispatch(toggleSidebar())} className="fixed inset-0 bg-black bg-opacity-40 z-10 md:hidden" />}
 
-      {/* Main Chat Area */}
+      {/*Navbar*/}
       <div className="flex-1 flex flex-col">
-        <div className=" dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 p-2">
-    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-2 py-1 rounded">
+        <div className="sticky dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 p-2">
+    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white text-lg px-2 py-1 rounded">
       ☰
     </button>
     <h1 className="font-semibold text-lg">RecipeGPT</h1>
@@ -115,8 +115,7 @@ const Home = () => {
 )}
   </div>
 
-  <div className="sticky bottom-0">
-    <div className="flex p-2">
+    <div className="flex p-2 sticky bottom-0">
       <input
         type="text"
         placeholder="Search recipe..."
@@ -128,7 +127,6 @@ const Home = () => {
         {loading ? <FaSpinner className="animate-spin" /> : "Go"}
       </button>
     </div>
-  </div>
 
       </div>
     </div>
