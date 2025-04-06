@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaSpinner } from "react-icons/fa";
 import {
   saveRecipe,
   selectRecipe,
@@ -66,8 +66,8 @@ const Home = () => {
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       className="border p-2 rounded-l w-full dark:bg-gray-700 dark:border-gray-600 focus:outline-none" />
-      <button onClick={handleSearch} className="bg-blue-600 text-white px-4 rounded-r">
-      Search
+      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r">
+      {loading ? <FaSpinner className="animate-spin" /> : "Go"}
     </button>
   </div>
           <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-500 text-white p-2 rounded">
@@ -98,11 +98,11 @@ const Home = () => {
     
     {selectedRecipe.imageUrl && (<>
       <img src={selectedRecipe.imageUrl} alt={selectedRecipe.title} className="w-full rounded-lg max-w-md mb-2 mt-4"  />
-      <button onClick={handleSave} className="bg-green-600 text-white px-4 mb-2 rounded">Save</button>
     </>)}
 
     {selectedRecipe.ingredients && (
       <div className="mb-4">
+        <button onClick={handleSave} className="bg-green-600 text-white px-4 mb-2 rounded">Save</button>
         <h2 className="font-semibold text-lg mb-1">🧂 Ingredients</h2>
         <pre className="whitespace-pre-wrap text-gray-100">{selectedRecipe.ingredients}</pre>
       </div>
