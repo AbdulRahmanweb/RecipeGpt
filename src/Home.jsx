@@ -115,7 +115,8 @@ const Home = () => {
 )}
   </div>
 
-    <div className="flex p-2 sticky bottom-0">
+<div className="flex">
+    <div className="flex p-2 sticky bottom-0 w-full">
       <input
         type="text"
         placeholder="Search recipe..."
@@ -126,6 +127,7 @@ const Home = () => {
       <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r">
         {loading ? <FaSpinner className="animate-spin" /> : "Go"}
       </button>
+    </div>
     </div>
 
       </div>
