@@ -46,6 +46,13 @@ const Home = () => {
     }
   };
 
+  const handleSuggestionClick = (suggested) => {
+    setQuery(suggested);
+    dispatch(fetchRecipes(suggested));
+  };
+  
+  
+
   return (
     <div className="flex h-screen dark:bg-gray-700 dark:text-white">
       {/* Sidebar */}
@@ -162,9 +169,25 @@ const Home = () => {
     )}
   </div>
 ) : (
-  <p className="text-center mt-10 text-gray-400 italic">
-    No recipe selected
-  </p>
+
+  <div className="mt-36 flex flex-col items-center">
+  <h2 className="text-xl font-semibold text-center mb-6 text-white">
+    What do you want to eat today?
+  </h2>
+  <div className="flex flex-wrap justify-center gap-3 px-7">
+    {["Pizza 🍕", "Biryani 🍲", "Pasta 🍝", "Salad 🥗", "Noodles 🍜", "Burger 🍔"].map((item) => (
+      <button
+        key={item}
+        onClick={() => handleSuggestionClick(item)}
+        className="bg-gray-700 hover:bg-gray-600 border border-gray-500 text-gray-300 px-4 py-2 rounded-xl transition"
+      >
+        {item}
+      </button>
+    ))}
+  </div>
+</div>
+
+  
 )}
 
   </div>
