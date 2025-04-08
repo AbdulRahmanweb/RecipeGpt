@@ -20,6 +20,15 @@ const recipeSlice = createSlice({
       state.saved.push(action.payload);
       saveToLocalStorage("savedRecipes", state.saved);
     },
+    deleteSavedRecipe: (state, action) => {
+      const idToDelete = action.payload;
+      state.saved = state.saved.filter(recipe => recipe.id !== idToDelete);
+
+      if (state.selectedRecipe?.id === idToDelete) {
+        state.selectedRecipe = null;
+      }
+      saveToLocalStorage("savedRecipes", state.saved); // persist update
+    },
     selectRecipe: (state, action) => {
       state.selectedRecipe = action.payload;
     },
@@ -49,6 +58,5 @@ const recipeSlice = createSlice({
   },
 });
 
-export const { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode } = recipeSlice.actions;
+export const { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe } = recipeSlice.actions; 
 export default recipeSlice.reducer;
-

@@ -51,7 +51,7 @@ Instructions:
       return [recipe];
 
     } catch (error) {
-      console.warn("❌ OpenAI failed, trying Spoonacular fallback...");
+      console.warn("OpenAI failed, trying Spoonacular fallback...");
 
       try {
         //Spoonacular fallback
@@ -91,7 +91,7 @@ Instructions:
         return [recipe];
 
       } catch (spoonError) {
-        console.warn("❌ Spoonacular failed, trying MealDB fallback...");
+        console.warn("Spoonacular failed, trying MealDB fallback...");
 
         try {
           //Trying mealdb fallback
@@ -127,7 +127,7 @@ Instructions:
           return [recipe];
 
         } catch (mealDbError) {
-          console.error("❌ MealDB failed too:", mealDbError);
+          console.error("MealDB failed too:", mealDbError);
           return rejectWithValue("Failed to fetch recipe from all sources.");
         }
       }
