@@ -20,6 +20,17 @@ const recipeSlice = createSlice({
       state.saved.push(action.payload);
       saveToLocalStorage("savedRecipes", state.saved);
     },
+
+    loadFromStorage: (state, action) => {
+      state.recipes = action.payload;
+      state.selectedRecipe = action.payload[0] || null;
+    },
+
+    clearRecipes: (state) => {
+      state.recipes = [];
+      state.selectedRecipe = null;
+    },  
+
     deleteSavedRecipe: (state, action) => {
       const idToDelete = action.payload;
       state.saved = state.saved.filter(recipe => recipe.id !== idToDelete);
@@ -29,12 +40,22 @@ const recipeSlice = createSlice({
       }
       saveToLocalStorage("savedRecipes", state.saved); // persist update
     },
+
     selectRecipe: (state, action) => {
       state.selectedRecipe = action.payload;
-    },
+    
+      // If it's a saved recipe, save its ID in localStorage
+      if (action.payload && state.saved.find(recipe => recipe.id === action.payload.id)) {
+        saveToLocalStorage("selectedSavedRecipeId", action.payload.id);
+      } else {
+        localStorage.removeItem("selectedSavedRecipeId");
+      }
+    },    
+
     toggleSidebar: (state) => {
       state.sidebarOpen = !state.sidebarOpen;
     },
+
     toggleDarkMode: (state) => {
       state.darkMode = !state.darkMode;
       saveToLocalStorage("darkMode", state.darkMode);
@@ -50,6 +71,7 @@ const recipeSlice = createSlice({
         state.loading = false;
         state.recipes = action.payload;
         state.selectedRecipe = action.payload[0];
+        saveToLocalStorage("cachedRecipes", action.payload);
       })
       .addCase(fetchRecipes.rejected, (state, action) => {
         state.loading = false;
@@ -58,5 +80,5 @@ const recipeSlice = createSlice({
   },
 });
 
-export const { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe } = recipeSlice.actions; 
+export const { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe, loadFromStorage, clearRecipes } = recipeSlice.actions; 
 export default recipeSlice.reducer;

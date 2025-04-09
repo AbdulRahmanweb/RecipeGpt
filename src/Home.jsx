@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSun, FaMoon, FaSpinner, FaTrash } from "react-icons/fa";
+import { FaSun, FaMoon, FaSpinner, FaTrash, FaSearch } from "react-icons/fa";
 import {
   saveRecipe,
   selectRecipe,
   toggleSidebar,
   toggleDarkMode,
-  deleteSavedRecipe
+  deleteSavedRecipe,
+  loadFromStorage
 } from "./Redux/recipeSlice";
 
 import { fetchRecipes } from "./Redux/recipeThunk";
@@ -20,17 +21,55 @@ const Home = () => {
     loading,
     sidebarOpen,
     darkMode,
+    recipes
   } = useSelector(state => state.recipes);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
+  
   const handleSearch = () => {
     if (query.trim()) {
+      localStorage.setItem("lastQuery", query.trim());
+      localStorage.removeItem("cachedRecipes"); // Clear previous cache
+      localStorage.removeItem("selectedSavedRecipeId"); // Clear saved selection
       dispatch(fetchRecipes(query.trim()));
     }
   };
+  
+
+  
+  
+  useEffect(() => {
+    const selectedSavedId = localStorage.getItem("selectedSavedRecipeId");
+    const savedRecipes = JSON.parse(localStorage.getItem("savedRecipes") || "[]");
+  
+    //If a saved recipe was selected, restore that first
+    if (selectedSavedId) {
+      const selected = savedRecipes.find(r => r.id === selectedSavedId);
+      if (selected) {
+        dispatch({ type: "recipes/selectRecipe", payload: selected });
+        return; // ⛔ skip loading search results
+      }
+    }
+  
+    //lse load last searched results
+    const lastQuery = localStorage.getItem("lastQuery");
+    const storedRecipes = localStorage.getItem("cachedRecipes");
+  
+    if (storedRecipes) {
+      const parsed = JSON.parse(storedRecipes);
+      dispatch({
+        type: "recipes/fetchRecipes/fulfilled", // trigger success manually
+        payload: parsed,
+      });
+    } else if (lastQuery) {
+      dispatch(fetchRecipes(lastQuery.trim().toLowerCase()));
+    }
+  }, []);    
+  
+  
 
   const handleSave = () => {
     if (selectedRecipe) {
@@ -46,15 +85,23 @@ const Home = () => {
     }
   };
 
-  const handleSuggestionClick = (suggested) => {
-    setQuery(suggested);
-    dispatch(fetchRecipes(suggested));
+  const cleanQuery = (text) => {
+    return text.replace(
+      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDD00-\uDDFF])/g,
+      ''
+    ).trim();
+  };
+
+  const handleSuggestionClick = (text) => {
+    const cleaned = cleanQuery(text);
+    setQuery(cleaned); // for UI
+    dispatch(fetchRecipes(cleaned));
   };
   
   
 
   return (
-    <div className="flex h-screen dark:bg-gray-700 dark:text-white">
+    <div className="flex h-screen dark:bg-gray-800 dark:text-white">
       {/* Sidebar */}
       <div className={`fixed md:static top-0 left-0 z-20 h-full overflow-y-auto scrollbar-hide bg-gray-100 dark:bg-gray-950 md:w-72 w-64 placeholder: p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <h2 className="text-lg font-semibold mb-4">Saved Recipes</h2>
@@ -185,9 +232,8 @@ const Home = () => {
       </button>
     ))}
   </div>
-</div>
-
   
+</div>
 )}
 
   </div>
@@ -197,10 +243,10 @@ const Home = () => {
         placeholder="Search recipe..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="border p-2 rounded-l w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none mb-1"
+        className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none mb-1"
       />
-      <button onClick={handleSearch} className="bg-blue-600 text-white px-2 rounded-r mb-1">
-        {loading ? <FaSpinner className="animate-spin" /> : "Go"}
+      <button onClick={handleSearch} className="dark:bg-gray-800 text-white border dark:border-gray-400 p-3 rounded-r-xl mb-1">
+        {loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}
       </button>
     </div>
 
