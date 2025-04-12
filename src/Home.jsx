@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSun, FaMoon, FaSpinner, FaTrash, FaSearch } from "react-icons/fa";
-import { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe, loadRecipesFromStorage, } from "./Redux/recipeSlice";
+import { FaSun, FaMoon, FaSpinner, FaTrash, FaSearch, FaPlusCircle } from "react-icons/fa";
+import { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe, loadRecipesFromStorage, newChat, clearRecipes } from "./Redux/recipeSlice";
 import { fetchRecipes } from "./Redux/recipeThunk";
 
 const Home = () => {
@@ -64,13 +64,20 @@ const Home = () => {
 
   const handleSuggestionClick = (text) => {
     const cleaned = cleanQuery(text);
-    setQuery(cleaned); // for UI
+    setQuery(cleaned);
     dispatch(fetchRecipes(cleaned));
   };
+
+  //Handling new chat
+  const handleNewChat = () => {
+    dispatch(clearRecipes());
+    dispatch(newChat());
+    setQuery("");
+  }
   
 
   return (
-    <div className="flex h-screen dark:bg-gray-800 dark:text-white">
+    <div className="flex h-screen dark:bg-gray-700 dark:text-white">
       {/* Sidebar */}
       <div className={`fixed md:static top-0 left-0 z-20 h-full overflow-y-auto scrollbar-hide bg-gray-100 dark:bg-gray-950 md:w-72 w-64 placeholder: p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
         <h2 className="text-lg font-semibold mb-4">Saved Recipes</h2>
@@ -90,13 +97,18 @@ const Home = () => {
       {/*Navbar*/}
       <div className="flex-1 flex flex-col">
         <div className="sticky top-0 dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 px-4 py-2">
-    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-black dark:text-white text-lg px-2 py-1 rounded">
+    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-xl px-2 py-1 rounded">
       ☰
     </button>
     <h1 className="font-semibold text-lg">RecipeGPT</h1>
-    <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-500 text-white p-2 rounded">
+    <div className="flex gap-2">
+    {selectedRecipe && (
+      <button onClick={handleNewChat} className="bg-gray-300 text-xl dark:bg-gray-700 p-1 rounded"><FaPlusCircle /></button>
+    )}
+    <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-300 dark:bg-gray-700 p-2 rounded text-xl">
       {darkMode ? <FaSun /> : <FaMoon />}
     </button>
+    </div>
   </div>
 
   <div className="flex-1 overflow-y-auto scrollbar-hide">
@@ -180,8 +192,8 @@ const Home = () => {
         onChange={(e) => setQuery(e.target.value)}
         className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 border-gray-400 focus:outline-none mb-1" />
 
-      <button onClick={handleSearch} className="dark:bg-gray-800 text-white border dark:border-gray-400 p-3 rounded-r-xl mb-1">
-        {loading ? <FaSpinner className="animate-spin" /> : <FaSearch className="text-black dark:text-white" />}</button>
+      <button onClick={handleSearch} className="dark:bg-gray-800 border dark:border-gray-400 p-3 rounded-r-xl mb-1">
+        {loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}</button>
     </div>
     </div>
     </div> )};

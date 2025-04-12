@@ -59,7 +59,7 @@ const recipeSlice = createSlice({
         state.selectedRecipe = null;
         localStorage.removeItem("selectedRecipeId");
       }
-    },    
+    },
 
     selectRecipe: (state, action) => {
       state.selectedRecipe = action.payload;
@@ -79,7 +79,19 @@ const recipeSlice = createSlice({
       state.darkMode = !state.darkMode;
       saveToLocalStorage("darkMode", state.darkMode);
     },
+
+  //New chat
+  newChat: (state) => {
+    state.selectedRecipe = null;
+    localStorage.removeItem("selectedRecipeId");
   },
+
+  //Cleaning recipe array list from redux state
+  clearRecipes: (state) => {
+    state.recipes = [],
+    saveToLocalStorage("filteredRecipes", []);
+  },
+},
 
   extraReducers: (builder) => {
     builder
@@ -120,7 +132,9 @@ export const {
   toggleSidebar,
   toggleDarkMode,
   deleteSavedRecipe,
-  loadRecipesFromStorage
+  loadRecipesFromStorage,
+  newChat,
+  clearRecipes,
 } = recipeSlice.actions;
 
 export default recipeSlice.reducer;
