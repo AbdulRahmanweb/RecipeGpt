@@ -149,7 +149,7 @@ const Home = () => {
         {selectedRecipe.analyzedInstructions?.[0]?.steps?.length > 0 ? (
           <div>
             <h2 className="font-semibold text-lg mb-1">Instructions</h2>
-            <ol className="list-decimal pl-5 text-gray-100 space-y-1">
+            <ol className="list-decimal pl-5 space-y-1">
               {selectedRecipe.analyzedInstructions[0].steps.map((step) => (
                 <li key={step.number}>{step.step}</li>))}
             </ol>
@@ -170,7 +170,7 @@ const Home = () => {
   <div className="flex flex-wrap justify-center gap-3 px-7">
     {["Pizza 🍕", "Biryani 🍲", "Pasta 🍝", "Salad 🥗", "Noodles 🍜", "Burger 🍔"].map((item) => (
       <button key={item} onClick={() => handleSuggestionClick(item)}
-        className="bg-gray-700 hover:bg-gray-600 border border-gray-500 text-gray-300 px-4 py-2 rounded-xl transition">{item}</button>))}
+        className="dark:bg-gray-700 dark:hover:bg-gray-600 border border-gray-500 text-gray-300 px-4 py-2 rounded-xl transition">{item}</button>))}
         </div>
       </div>)}
     </div>
@@ -178,10 +178,10 @@ const Home = () => {
     <div className="flex px-2 sticky bottom-0">
       <input type="text" placeholder="Search recipe..." value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 dark:border-gray-400 focus:outline-none mb-1" />
+        className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 border-gray-400 focus:outline-none mb-1" />
 
       <button onClick={handleSearch} className="dark:bg-gray-800 text-white border dark:border-gray-400 p-3 rounded-r-xl mb-1">
-        {loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}</button>
+        {loading ? <FaSpinner className="animate-spin" /> : <FaSearch className="text-black dark:text-white" />}</button>
     </div>
     </div>
     </div> )};
