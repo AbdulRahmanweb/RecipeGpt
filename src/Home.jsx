@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaSun, FaMoon, FaSpinner, FaTrash, FaSearch, FaPlusCircle } from "react-icons/fa";
-import { saveRecipe, selectRecipe, toggleSidebar, toggleDarkMode, deleteSavedRecipe, loadRecipesFromStorage, newChat, clearRecipes } from "./Redux/recipeSlice";
+import { FaSpinner, FaSearch } from "react-icons/fa";
+import { saveRecipe, toggleSidebar, loadRecipesFromStorage, newChat, clearRecipes } from "./Redux/recipeSlice";
 import { fetchRecipes } from "./Redux/recipeThunk";
+import SkeletonLoading from "./SkeletonLoading";
+import Sidebar from "./Sidebar";
+import Navbar from "./Navbar";
 
 const Home = () => {
   const [query, setQuery] = useState("");
   const dispatch = useDispatch();
-  const { selectedRecipe, saved, loading, sidebarOpen, darkMode, } = useSelector(state => state.recipes);
-
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-  }, [darkMode]);
+  const { selectedRecipe, loading, sidebarOpen } = useSelector(state => state.recipes);
 
   
   const handleSearch = () => {
@@ -22,8 +20,6 @@ const Home = () => {
       dispatch(fetchRecipes(query.trim()));
     }
   };
-  
-  
   
   useEffect(() => {
     const lastQuery = localStorage.getItem("lastQuery");
@@ -36,23 +32,12 @@ const Home = () => {
     }
   }, []);  
   
-    
-   const handleSave = () => {
+  const handleSave = () => {
     if (selectedRecipe) {
       dispatch(saveRecipe(selectedRecipe));
     }
     localStorage.setItem("selectedRecipeId", selectedRecipe.id)
   };
-
-
-  const handleDelete = (id) => {
-    dispatch(deleteSavedRecipe(id));
-
-    if (selectedRecipe && selectedRecipe.id === id) {
-      dispatch(selectRecipe(null));
-    }
-  };
-
 
   const cleanQuery = (text) => {
     return text.replace(
@@ -67,73 +52,22 @@ const Home = () => {
     setQuery(cleaned);
     dispatch(fetchRecipes(cleaned));
   };
-
-  //Handling new chat
-  const handleNewChat = () => {
-    dispatch(clearRecipes());
-    dispatch(newChat());
-    setQuery("");
-  }
   
-
   return (
     <div className="flex h-screen dark:bg-gray-700 dark:text-white">
-      {/* Sidebar */}
-      <div className={`fixed md:static top-0 left-0 z-20 h-full overflow-y-auto scrollbar-hide bg-gray-100 dark:bg-gray-950 md:w-72 w-64 placeholder: p-4 transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
-        <h2 className="text-lg font-semibold mb-4">Saved Recipes</h2>
-        {saved.map((item, id) => (
-          <div key={id} onClick={() => dispatch(selectRecipe(item))} className="cursor-pointer text-black dark:text-white dark:hover:bg-gray-700 mb-2 p-1">
-            {item.title}
-            <button className="text-red-500 hover:text-red-700 ml-2" 
-            onClick={(e) => {e.stopPropagation()
-             handleDelete(item.id)}}> <FaTrash /></button>
-          </div>
-        ))}
-      </div>
-      
       {/* Overlay on mobile when sidebar is open */}
       {sidebarOpen && <div onClick={() => dispatch(toggleSidebar())} className="fixed inset-0 bg-black bg-opacity-40 z-10 md:hidden" />}
+        <Sidebar />
 
       {/*Navbar*/}
       <div className="flex-1 flex flex-col">
-        <div className="sticky top-0 dark:bg-gray-700 border-b-2 border-gray-500 flex items-center justify-between mb-4 px-4 py-2">
-    <button onClick={() => dispatch(toggleSidebar())} className="md:hidden bg-gray-300 dark:bg-gray-700 text-xl px-2 py-1 rounded">
-      ☰
-    </button>
-    <h1 className="font-semibold text-lg">RecipeGPT</h1>
-    <div className="flex gap-2">
-    {selectedRecipe && (
-      <button onClick={handleNewChat} className="bg-gray-300 text-xl dark:bg-gray-700 p-1 rounded"><FaPlusCircle /></button>
-    )}
-    <button onClick={() => dispatch(toggleDarkMode())} className="bg-gray-300 dark:bg-gray-700 p-2 rounded text-xl">
-      {darkMode ? <FaSun /> : <FaMoon />}
-    </button>
-    </div>
-  </div>
+        <Navbar setQuery={setQuery} />
 
   <div className="flex-1 overflow-y-auto scrollbar-hide">
     {/*Content*/}
-    {loading && loading && (
-  <div className="animate-pulse space-y-4 bg-white dark:bg-gray-800 p-4 rounded shadow">
-    <div className="h-6 w-2/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Title */}
-    <div className="h-60 w-full max-w-md bg-gray-300 dark:bg-gray-700 rounded" /> {/* Image */}
-
-    <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Ingredients */}
-    <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-4/5 bg-gray-300 dark:bg-gray-700 rounded mb-4" />
-
-    <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Instructions */}
-    <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-4/5 bg-gray-300 dark:bg-gray-700 rounded mb-4" />
-
-    <div className="h-4 w-1/3 bg-gray-300 dark:bg-gray-700 rounded" /> {/* Instructions */}
-    <div className="h-3 w-full bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-5/6 bg-gray-300 dark:bg-gray-700 rounded" />
-    <div className="h-3 w-4/5 bg-gray-300 dark:bg-gray-700 rounded" />
-  </div>
-)}
+    {loading && (
+      <SkeletonLoading />
+    )}
 
 {selectedRecipe ? (
   <div className="bg-white dark:bg-gray-700 rounded shadow p-4 flex-col items-center">
@@ -152,7 +86,7 @@ const Home = () => {
 
         <button onClick={handleSave} className="bg-green-600 text-white px-4 mb-2 rounded">Save</button>
 
-        <h2 className="font-semibold text-lg mb-1">🧂 Ingredients</h2>
+        <h2 className="font-bold text-xl mt-2 mb-1">Ingredients</h2>
         <pre className="whitespace-pre-wrap">{selectedRecipe.ingredients}</pre>
         </div> )}
 
@@ -160,7 +94,7 @@ const Home = () => {
       <div>
         {selectedRecipe.analyzedInstructions?.[0]?.steps?.length > 0 ? (
           <div>
-            <h2 className="font-semibold text-lg mb-1">Instructions</h2>
+            <h2 className="font-bold text-xl mb-1">Instructions</h2>
             <ol className="list-decimal pl-5 space-y-1">
               {selectedRecipe.analyzedInstructions[0].steps.map((step) => (
                 <li key={step.number}>{step.step}</li>))}
@@ -168,13 +102,13 @@ const Home = () => {
           </div> )
              : 
            ( <div>
-            <h2 className="font-semibold text-lg mb-1">Instructions</h2>
+            <h2 className="font-bold text-xl mb-1">Instructions</h2>
             <pre className="whitespace-pre-wrap">
               {selectedRecipe.description}</pre>
           </div>)}
       </div>)}
   </div> )
-     : 
+     : !loading ?
    ( <div className="mt-36 flex flex-col items-center">
     <h2 className="text-xl font-semibold text-center mb-6 text-white">
       What do you want to eat today?</h2>
@@ -184,7 +118,7 @@ const Home = () => {
       <button key={item} onClick={() => handleSuggestionClick(item)}
         className="dark:bg-gray-700 dark:hover:bg-gray-600 border border-gray-500 text-gray-300 px-4 py-2 rounded-xl transition">{item}</button>))}
         </div>
-      </div>)}
+      </div>) : null}
     </div>
 
     <div className="flex px-2 sticky bottom-0">
