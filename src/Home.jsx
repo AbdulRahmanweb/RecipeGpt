@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaSpinner, FaSearch } from "react-icons/fa";
-import { saveRecipe, toggleSidebar, loadRecipesFromStorage, newChat, clearRecipes } from "./Redux/recipeSlice";
+import { saveRecipe, toggleSidebar, loadRecipesFromStorage, selectRecipe } from "./Redux/recipeSlice";
 import { fetchRecipes } from "./Redux/recipeThunk";
 import SkeletonLoading from "./SkeletonLoading";
 import Sidebar from "./Sidebar";
@@ -21,16 +21,28 @@ const Home = () => {
     }
   };
   
+  
+  
   useEffect(() => {
+    const selected = localStorage.getItem("selectedRecipe");
     const lastQuery = localStorage.getItem("lastQuery");
     const storedRecipes = localStorage.getItem("filteredRecipes");
   
-    if (storedRecipes) {
-      dispatch(loadRecipesFromStorage());
-    } else if (lastQuery) {
-      dispatch(fetchRecipes(lastQuery.trim().toLowerCase()));
+    if (selected) {
+      dispatch(selectRecipe(JSON.parse(selected)));
     }
-  }, []);  
+  
+    // Only fetch recipes if no selected recipe is loaded
+    if (!selected) {
+      if (storedRecipes) {
+        dispatch(loadRecipesFromStorage());
+      } else if (lastQuery) {
+        dispatch(fetchRecipes(lastQuery.trim().toLowerCase()));
+      }
+    }
+  }, []);
+  
+   
   
   const handleSave = () => {
     if (selectedRecipe) {

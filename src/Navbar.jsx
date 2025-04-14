@@ -16,6 +16,7 @@ const Navbar = ({setQuery}) => {
     dispatch(clearRecipes());
     dispatch(newChat());
 	setQuery("");
+  localStorage.removeItem("selectedRecipe");
   };
 
   return (
