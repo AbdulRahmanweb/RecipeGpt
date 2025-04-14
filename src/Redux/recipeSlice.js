@@ -63,6 +63,9 @@ const recipeSlice = createSlice({
 
     selectRecipe: (state, action) => {
       state.selectedRecipe = action.payload;
+      if (state.sidebarOpen) {
+        state.sidebarOpen = false;
+      }
 
       if (action.payload?.id) {
         localStorage.setItem("selectedRecipeId", action.payload.id);
