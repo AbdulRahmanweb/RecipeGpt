@@ -128,7 +128,7 @@ const Home = () => {
   <div className="flex flex-wrap justify-center gap-3 px-7">
     {["Pizza 🍕", "Biryani 🍲", "Pasta 🍝", "Salad 🥗", "Noodles 🍜", "Burger 🍔"].map((item) => (
       <button key={item} onClick={() => handleSuggestionClick(item)}
-        className="dark:bg-gray-700 dark:hover:bg-gray-600 border border-gray-500 text-gray-300 px-4 py-2 rounded-xl transition">{item}</button>))}
+        className="dark:bg-gray-700 dark:hover:bg-gray-600 border border-gray-500 dark:text-gray-300 px-4 py-2 rounded-xl transition">{item}</button>))}
         </div>
       </div>) : null}
     </div>
@@ -136,9 +136,9 @@ const Home = () => {
     <div className="flex px-2 sticky bottom-0">
       <input type="text" placeholder="Search recipe..." value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 border-gray-400 focus:outline-none mb-1" />
+        className="border p-3 rounded-l-2xl w-full dark:bg-gray-800 border-gray-400 focus:outline-none mb-1 border-r-0" />
 
-      <button onClick={handleSearch} className="dark:bg-gray-800 border dark:border-gray-400 p-3 rounded-r-xl mb-1">
+      <button onClick={handleSearch} className="dark:bg-gray-800 border border-gray-400 p-3 rounded-r-xl mb-1">
         {loading ? <FaSpinner className="animate-spin" /> : <FaSearch />}</button>
     </div>
     </div>
