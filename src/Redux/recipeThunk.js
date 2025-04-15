@@ -16,8 +16,8 @@ export const fetchRecipes = createAsyncThunk("recipes/fetchRecipes",
 
 Title: [Recipe Title]
 Ingredients:
-- [ingredient 1]
-- [ingredient 2]
+ [ingredient 1]
+ [ingredient 2]
 
 Instructions:
 1. Step one
@@ -41,7 +41,6 @@ Instructions:
 
       //Trying to get image from Spoonacular
       const spoonKey = import.meta.env.VITE_SPOONACULAR_API_KEY;
-      console.log(spoonKey);
       const spoonImageRes = await fetch(
         `https://api.spoonacular.com/recipes/complexSearch?query=${query}&number=1&apiKey=${spoonKey}`
       );

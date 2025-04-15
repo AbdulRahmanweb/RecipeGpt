@@ -29,7 +29,7 @@ const Navbar = ({setQuery}) => {
 		<h1 className="font-semibold text-lg">RecipeGPT</h1>
 		</div>
 
-        <div className="flex">
+        <div className="flex gap-2">
           {selectedRecipe && (
             <button
               onClick={handleNewChat}

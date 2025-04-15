@@ -15,7 +15,7 @@ const Sidebar = () => {
 
 	const handleDelete = (id) => {
 		dispatch(deleteSavedRecipe(id));
-		localStorage.removeItem("SelectedRecipe");
+		localStorage.removeItem("selectedRecipe");
 	
 		if (selectedRecipe && selectedRecipe.id === id) {
 		  dispatch(selectRecipe(null));
